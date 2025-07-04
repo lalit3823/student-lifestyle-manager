@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Timetable</title>
+</head>
+<body>
+<h1>Timetable</h1>
+
+<form th:action="@{/timetable/add}" th:object="${entry}" method="post">
+    <label>Day:</label>
+    <select th:field="*{day}" required>
+        <option th:each="d : ${T(java.time.DayOfWeek).values()}" th:value="${d}" th:text="${d}">Monday</option>
+    </select><br>
+
+    <label>Subject:</label>
+    <input type="text" th:field="*{subject}" required /><br>
+
+    <label>Start Time:</label>
+    <input type="time" th:field="*{startTime}" required /><br>
+
+    <label>End Time:</label>
+    <input type="time" th:field="*{endTime}" required /><br>
+
+    <button type="submit">Add Entry</button>
+</form>
+
+<ul>
+    <li th:each="e : ${timetable}">
+        <strong th:text="${e.day} + ' - ' + ${e.subject}"></strong>:
+        <span th:text="${#temporals.format(e.startTime, 'HH:mm')}"></span>
+        to
+        <span th:text="${#temporals.format(e.endTime, 'HH:mm')}"></span>
+        <form th:action="@{/timetable/delete/{id}(id=${e.id})}" method="post" style="display:inline;">
+            <button type="submit">Delete</button>
+        </form>
+    </li>
+</ul>
+
+<a th:href="@{/}">Back to Home</a>
+</body>
+</html>

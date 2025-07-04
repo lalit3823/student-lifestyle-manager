@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Lifestyle Manager</title>
+    <link rel="stylesheet" type="text/css" href="/style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f1f1f1;
+            margin: 0;
+        }
+        .header {
+            background-color: #2d6cdf;
+            color: white;
+            padding: 20px;
+            font-size: 22px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 20px;
+            gap: 20px;
+        }
+        .card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
+            flex: 1 1 250px;
+        }
+        h2 {
+            margin-top: 0;
+        }
+        .card ul {
+            list-style: none;
+            padding: 0;
+        }
+        .card li {
+            margin-bottom: 10px;
+        }
+        a.button {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 8px 12px;
+            background-color: #2d6cdf;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <div>STUDENT LIFESTYLE MANAGER</div>
+    <div class="dropdown">
+        <button class="dropbtn">Settings</button>
+        <div class="dropdown-content">
+            <form th:action="@{/logout}" method="post">
+                <button type="submit" class="logout-button">Logout</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="dashboard-grid">
+    <div class="card">
+        <h2>Schedule</h2>
+        <a href="/timetable"><button>View Timetable</button></a>
+    </div>
+    <div class="card">
+        <h2>Tasks</h2>
+        <a href="/tasks"><button>Manage Tasks</button></a>
+    </div>
+    <div class="card">
+        <h2>Notes</h2>
+        <a href="/notes"><button>View Notes</button></a>
+    </div>
+    <div class="card">
+        <h2>Reminders</h2>
+        <a href="/reminders"><button>Set Reminders</button></a>
+
+        <!-- Show this block only if reminders list is not empty -->
+        <div th:if="${reminders != null and !reminders.isEmpty()}">
+            <h3>Upcoming (Next 1 Hour)</h3>
+            <ul>
+                <li th:each="rem : ${reminders}">
+                    <strong th:text="${rem.message}"></strong> at
+                    <span th:text="${#temporals.format(rem.reminderTime, 'HH:mm')}"></span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Budget</h2>
+        <a href="/budget"><button>Track Budget</button></a>
+    </div>
+
+    <!--    <div class="card">-->
+<!--        <h2>Health</h2>-->
+<!--        <a href="/health"><button>Track Health</button></a> &lt;!&ndash; placeholder for the new feature &ndash;&gt;-->
+<!--    </div>-->
+</div>
+</body>
+</html>

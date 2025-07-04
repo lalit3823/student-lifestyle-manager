@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Budget Manager</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f1f1f1;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #2d6cdf;
+        }
+        .form-container, .list-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        button {
+            margin-top: 15px;
+            padding: 10px 15px;
+            background-color: #2d6cdf;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table th, table td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        a.button-link {
+            text-decoration: none;
+            color: white;
+            background-color: #2d6cdf;
+            padding: 5px 10px;
+            border-radius: 4px;
+            margin-right: 5px;
+        }
+        .home-link {
+            margin-top: 20px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Budget Tracker</h1>
+
+<!-- Budget Form -->
+<div class="form-container">
+    <form th:action="@{${budget.id} != null ? '/budget/update' : '/budget/add'}" th:object="${budget}" method="post">
+        <input type="hidden" th:field="*{id}"/>
+
+        <label>Category:</label>
+        <input type="text" th:field="*{category}" required/>
+
+        <label>Amount:</label>
+        <input type="number" step="0.01" th:field="*{amount}" required/>
+
+        <label>Date:</label>
+        <input type="date" th:field="*{date}" required/>
+
+        <label>Notes:</label>
+        <textarea th:field="*{notes}"></textarea>
+
+        <button type="submit" th:text="${budget.id} != null ? 'Update Budget' : 'Add Budget'">Add Budget</button>
+    </form>
+</div>
+
+<!-- Budget List -->
+<div class="list-container">
+    <h2>All Budget Entries</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>Category</th>
+            <th>Amount</th>
+            <th>Date</th>
+            <th>Notes</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="b : ${budgets}">
+            <td th:text="${b.category}"></td>
+            <td th:text="${b.amount}"></td>
+            <td th:text="${b.date}"></td>
+            <td th:text="${b.notes}"></td>
+            <td>
+                <a th:href="@{'/budget/edit/' + ${b.id}}" class="button-link">Edit</a>
+                <form th:action="@{'/budget/delete/' + ${b.id}}" method="post" style="display:inline;">
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<a href="/" class="home-link">← Back to Home</a>
+
+</body>
+</html>

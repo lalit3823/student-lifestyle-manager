@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Notes</title>
+</head>
+<body>
+<h1>Notes</h1>
+
+<!-- ✅ Add/Edit Note Form -->
+<form th:action="@{${note.id} != null ? '/notes/update' : '/notes/add'}" th:object="${note}" method="post">
+    <input type="hidden" th:field="*{id}" />
+
+    <label>Title:</label>
+    <input type="text" th:field="*{title}" required /><br>
+
+    <label>Content:</label>
+    <textarea th:field="*{content}" required></textarea><br>
+
+    <button type="submit" th:text="${note.id} != null ? 'Update Note' : 'Add Note'">Add Note</button>
+</form>
+
+<!-- ❌ Remove this - it's trying to show an Edit button for the note being edited -->
+<!-- <td><a th:href="@{'/notes/edit/' + ${note.id}}"><button>Edit</button></a></td> -->
+
+<!-- ✅ Notes List -->
+<ul>
+    <li th:each="n : ${notes}">
+        <strong th:text="${n.title}"></strong>:
+        <span th:text="${n.content}"></span>
+
+        <!-- ✅ Edit Button -->
+        <a th:href="@{'/notes/edit/' + ${n.id}}"><button>Edit</button></a>
+
+        <!-- ✅ Delete Button -->
+        <form th:action="@{/notes/delete/{id}(id=${n.id})}" method="post" style="display:inline;">
+            <button type="submit">Delete</button>
+        </form>
+    </li>
+</ul>
+
+<a th:href="@{/}">Back to Home</a>
+</body>
+</html>

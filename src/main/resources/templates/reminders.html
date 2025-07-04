@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Reminders</title>
+</head>
+<body>
+<h1>Reminders</h1>
+
+<!-- Add/Update Reminder Form -->
+<form th:action="@{${reminder.id} != null ? '/reminders/update' : '/reminders/add'}" th:object="${reminder}" method="post">
+    <input type="hidden" th:field="*{id}" />
+
+    <label>Title:</label>
+    <input type="text" th:field="*{message}" required />
+
+    <label>Reminder Time:</label>
+    <input type="datetime-local" th:field="*{reminderTime}" required /><br>
+
+    <button type="submit" th:text="${reminder.id} != null ? 'Update' : 'Add Reminder'">Add Reminder</button>
+</form>
+
+<!-- Reminder List -->
+<ul>
+    <li th:each="rem : ${reminders}">
+        <strong th:text="${rem.message}"></strong> at
+        <span th:text="${#temporals.format(rem.reminderTime, 'yyyy-MM-dd HH:mm')}"></span>
+        <form th:action="@{/reminders/delete/{id}(id=${rem.id})}" method="post" style="display:inline;">
+            <button type="submit">Delete</button>
+        </form>
+        <a th:href="@{'/reminders/edit/' + ${rem.id}}"><button>Edit</button></a>
+    </li>
+</ul>
+
+<a th:href="@{/}">Back to Home</a>
+</body>
+</html>
